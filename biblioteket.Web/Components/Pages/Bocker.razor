@@ -1,0 +1,93 @@
+﻿@page "/"
+@page "/bocker"
+@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
+
+<div class="d-flex align-items-center gap-3 mb-2">
+    <h3 class="mb-0">Böcker</h3>
+
+    @if (!string.IsNullOrEmpty(FilterFörfattare))
+    {
+        <span class="badge text-bg-primary fs-6">
+            Författare: @FilterFörfattare
+            <a href="/" class="text-white ms-2 text-decoration-none" title="Visa alla">✕</a>
+        </span>
+    }
+    else if (!string.IsNullOrEmpty(FilterInläsare))
+    {
+        <span class="badge text-bg-secondary fs-6">
+            Inläsare: @FilterInläsare
+            <a href="/" class="text-white ms-2 text-decoration-none" title="Visa alla">✕</a>
+        </span>
+    }
+</div>
+
+<table class="table table-striped table-hover table-bordered" style="table-layout: fixed;">
+    <colgroup>
+        <col style="width: 45%;" />
+        <col style="width: 10%;" />
+        <col style="width: 25%;" />
+        <col style="width: 20%;" />
+    </colgroup>
+    <thead class="table-dark">
+        <tr>
+            <th>Titel</th>
+            <th>Nedladdad</th>
+            <th>Författare</th>
+            <th>Inläsare</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var bok in PagedBokLista)
+        {
+            <tr style="cursor: pointer;" @onclick='() => NavigationManager.NavigateTo($"/bocker/{bok.Id}")'>                
+                <td>@bok.Titel</td>                
+                <td>@bok?.SenastNedladdad</td>
+                <td class="text-truncate" @onclick:stopPropagation>
+                    <a href="@NavigationManager.GetUriWithQueryParameters(new Dictionary<string, object?> { ["forfattare"] = bok.Författare.First(), ["inlasare"] = null })"
+                           class="text-decoration-none text-reset link-opacity-75-hover"
+                           title="Visa böcker av @bok?.Författare.First()">                       
+
+                        @bok?.Författare.First()                        
+
+                    </a> 
+                    
+                </td>
+                <td class="text-truncate" @onclick:stopPropagation>
+                    <a href="@NavigationManager.GetUriWithQueryParameters(new Dictionary<string, object?> { ["inlasare"] = bok.Inläsare, ["forfattare"] = null })"
+                           class="text-decoration-none text-reset link-opacity-75-hover"
+                           title="Visa böcker inlästa av @bok.Inläsare">
+                        @bok.Inläsare
+                    </a>                    
+                </td>
+            </tr>
+        }
+        @for (int i = PagedBokLista.Count(); i < ItemsPerPage; i++)
+        {
+            <tr>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<nav>
+    <ul class="pagination justify-content-center">
+        <li class="page-item @(CurrentPage == 1 ? "disabled" : "")">
+            <button class="page-link" @onclick="PreviousPage">Föregående</button>
+        </li>
+        @for (int i = 1; i <= TotalPages; i++)
+        {
+            var pageNumber = i;
+            <li class="page-item @(CurrentPage == pageNumber ? "active" : "")">
+                <button class="page-link" @onclick="() => GoToPage(pageNumber)">@pageNumber</button>
+            </li>
+        }
+        <li class="page-item @(CurrentPage == TotalPages ? "disabled" : "")">
+            <button class="page-link" @onclick="NextPage">Nästa</button>
+        </li>
+    </ul>
+</nav>

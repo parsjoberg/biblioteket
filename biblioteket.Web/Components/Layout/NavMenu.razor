@@ -1,0 +1,22 @@
+﻿<div class="top-row ps-3 navbar navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/bocker">biblioteket</a>
+    </div>
+</div>
+
+<input type="checkbox" title="Navigation menu" class="navbar-toggler" />
+
+<div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
+    <nav class="nav flex-column">
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="/bocker">
+                <span class="bi bi-list-nested" aria-hidden="true"></span> Böcker
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="/bocker/ny">
+                <span class="bi bi-list-nested" aria-hidden="true"></span> Ny Bok
+            </NavLink>
+        </div>
+    </nav>
+</div>

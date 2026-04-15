@@ -1,0 +1,8 @@
+@ApiService_HostAddress = http://localhost:5332
+
+
+POST {{ApiService_HostAddress}}/api/legimusUrl
+Content-Type: application/json
+{
+  "LegimusUrl": "https://www.legimus.se/bok?librisId=j2vvqk0v10rr93v"
+}   

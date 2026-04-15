@@ -1,0 +1,54 @@
+services:
+  aspire-dashboard:
+    image: mcr.microsoft.com/dotnet/aspire-dashboard:latest
+    ports:
+      - "18888:18888"  # Dashboard UI
+      - "18889:18889"  # OTLP gRPC ingestion
+    environment:
+      - DOTNET_DASHBOARD_UNSECURED_ALLOW_ANONYMOUS=true
+
+  redis:
+    image: docker.io/redis:latest
+    ports:
+      - "6379:6379"
+
+  apiservice:
+    build:
+      context: .
+      dockerfile: biblioteket.ApiService/Dockerfile
+    ports:
+      - "5001:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://aspire-dashboard:18889
+      - OTEL_EXPORTER_OTLP_PROTOCOL=grpc
+      - OTEL_SERVICE_NAME=apiservice
+    depends_on:
+      - redis
+      - aspire-dashboard
+
+  web:
+    build:
+      context: .
+      dockerfile: biblioteket.Web/Dockerfile
+    volumes:
+      - biblioteket-data:/data
+    ports:
+      - "5000:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
+      - services__apiservice__http__0=http://apiservice:8080
+      - ConnectionStrings__cache=redis:6379
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://aspire-dashboard:18889
+      - OTEL_EXPORTER_OTLP_PROTOCOL=grpc
+      - OTEL_SERVICE_NAME=web
+      - ConnectionStrings__BiblioteketDb=Data Source=/data/Biblioteket2.db
+    depends_on:
+      - redis
+      - apiservice
+      - aspire-dashboard
+
+volumes:
+  biblioteket-data:

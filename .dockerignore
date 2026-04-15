@@ -1,0 +1,16 @@
+# Build output
+**/bin/
+**/obj/
+
+# IDE files
+**/.vs/
+**/.idea/
+**/*.user
+
+# Git
+.git/
+.gitignore
+
+# Compose and local config
+compose.yaml
+*.md

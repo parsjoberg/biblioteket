@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json.schemastore.org/launchsettings.json",
+  "profiles": {
+    "https": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      "applicationUrl": "https://localhost:17251;http://localhost:15238",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "DOTNET_ENVIRONMENT": "Development",
+        "ASPIRE_DASHBOARD_OTLP_ENDPOINT_URL": "https://localhost:21057",
+        "ASPIRE_DASHBOARD_MCP_ENDPOINT_URL": "https://localhost:23104",
+        "ASPIRE_RESOURCE_SERVICE_ENDPOINT_URL": "https://localhost:22062"
+      }
+    },
+    "podman": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      "applicationUrl": "https://localhost:17042;http://localhost:15055",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "DOTNET_ENVIRONMENT": "Development",
+        "DOTNET_DASHBOARD_OTLP_ENDPOINT_URL": "https://localhost:21073",
+        "DOTNET_RESOURCE_SERVICE_ENDPOINT_URL": "https://localhost:22178",
+        "DOCKER_HOST": "npipe:////./pipe/podman-machine-default"
+      }
+    },
+    "http": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      "applicationUrl": "http://localhost:15238",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "DOTNET_ENVIRONMENT": "Development",
+        "ASPIRE_DASHBOARD_OTLP_ENDPOINT_URL": "http://localhost:19218",
+        "ASPIRE_DASHBOARD_MCP_ENDPOINT_URL": "http://localhost:18152",
+        "ASPIRE_RESOURCE_SERVICE_ENDPOINT_URL": "http://localhost:20146"
+      }
+    }
+  }
+}

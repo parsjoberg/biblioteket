@@ -1,0 +1,136 @@
+@page "/bocker/ny"
+@page "/bocker/{Id:int}"
+@rendermode InteractiveServer
+
+@if (skapaLäge)
+{
+    <div class="d-flex align-items-center gap-3 mb-4">
+        <a href="/bocker" class="btn btn-outline-secondary btn-sm">
+            &larr; Tillbaka till listan
+        </a>
+        <h3 class="mb-0">Ny bok</h3>
+    </div>
+
+    @if (redigeraKopia is not null)
+    {
+        <div class="card border-primary">
+            <div class="card-body">
+                <EditForm Model="redigeraKopia" OnValidSubmit="Spara">
+                    @RenderBokFormulär(redigeraKopia)
+                    <div class="d-flex justify-content-end gap-2 mt-3">
+                        <button type="submit" class="btn btn-success">💾 Spara</button>
+                    </div>
+                </EditForm>
+            </div>
+        </div>
+    }
+}
+else if (bok is null)
+{
+    <p>Laddar...</p>
+}
+else
+{
+    <div class="d-flex align-items-center gap-3 mb-4">
+        <a href="/bocker" class="btn btn-outline-secondary btn-sm">
+            &larr; Tillbaka till listan
+        </a>
+        <h3 class="mb-0">@bok.Titel</h3>
+        <button class="btn btn-sm @(redigeringsläge ? "btn-outline-danger" : "btn-outline-primary") ms-auto"
+                @onclick="ToggleRedigeringsläge">
+            @(redigeringsläge ? "✕ Avbryt" : "✎ Redigera")
+        </button>
+    </div>
+
+    @if (redigeringsläge && redigeraKopia is not null)
+    {
+        <div class="card border-primary">
+            <div class="card-body">
+                <EditForm Model="redigeraKopia" OnValidSubmit="Spara">
+                    @RenderBokFormulär(redigeraKopia)
+                    <div class="d-flex justify-content-end gap-2 mt-3">
+                        <button type="submit" class="btn btn-success">💾 Spara</button>
+                    </div>
+                </EditForm>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="card">
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-3">Legimus URL</dt>
+                    <dd class="col-sm-9">@bok.LegimusUrl</dd>
+
+                    <dt class="col-sm-3">Titel</dt>
+                    <dd class="col-sm-9">@bok.Titel</dd>
+
+                    <dt class="col-sm-3">Nedladdad</dt>
+                    <dd class="col-sm-9">@bok.SenastNedladdad?.ToString("yyyy-MM-dd HH:mm:ss")</dd>
+
+                    <dt class="col-sm-3">Författare</dt>
+                    <dd class="col-sm-9">@string.Join(", ", bok.Författare)</dd>
+
+                    <dt class="col-sm-3">Inläsare</dt>
+                    <dd class="col-sm-9">@bok.Inläsare</dd>
+                </dl>
+            </div>
+        </div>
+    }
+}
+
+@* I d-flex-raden med sidhuvudsknappar *@
+<button class="btn btn-outline-danger btn-sm" @onclick="VisaBekräftelse">
+    🗑 Ta bort
+</button>
+
+@* Bekräftelsepanel – visas under sidhuvudet *@
+@if (bekräftaTabort)
+{
+    <div class="alert alert-danger d-flex align-items-center gap-3 mb-3">
+        <span>Är du säker på att du vill ta bort <strong>@bok.Titel</strong>?</span>
+        <button class="btn btn-danger btn-sm" @onclick="TaBortBok">Ja, ta bort</button>
+        <button class="btn btn-secondary btn-sm" @onclick="AvbrytTabort">Avbryt</button>
+    </div>
+}
+
+@code {
+    private RenderFragment<Bok> RenderBokFormulär => kopia =>
+        @<dl class="row align-items-center">
+            <dt class="col-sm-3">Legimus URL</dt>
+            <dd class="col-sm-9">
+                <InputText class="form-control" @bind-Value="kopia.LegimusUrl" />
+            </dd>
+        
+            <dt class="col-sm-3">Titel</dt>
+            <dd class="col-sm-9">
+                <InputText class="form-control" @bind-Value="kopia.Titel" />
+            </dd>
+
+            <dt class="col-sm-3">Nedladdad</dt>
+            <dd class="col-sm-9">
+                <span class="form-control-plaintext">@bok?.SenastNedladdad?.ToString("yyyy-MM-dd HH:mm:ss")</span>
+            </dd>
+
+            <dt class="col-sm-3">Författare</dt>
+            <dd class="col-sm-9">
+                @foreach (var f in kopia.Författare)
+                {
+                    <div class="d-flex align-items-center gap-2 mb-1">
+                        <span class="form-control-plaintext py-0">@f</span>
+                        <button type="button" class="btn btn-outline-danger btn-sm" @onclick="() => TaBortFörfattare(f)">✕</button>
+                    </div>
+                }
+                <div class="input-group mt-1">
+                    <input class="form-control" placeholder="Lägg till författare..." @bind="nyFörfattare" @bind:event="oninput" />
+                    <button type="button" class="btn btn-outline-secondary" @onclick="LäggTillFörfattare">+ Lägg till</button>
+                </div>
+            </dd>
+
+            <dt class="col-sm-3">Inläsare</dt>
+            <dd class="col-sm-9">
+                <InputText class="form-control" @bind-Value="kopia.Inläsare" />
+            </dd>
+        </dl>;
+}
