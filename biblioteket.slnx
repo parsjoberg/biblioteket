@@ -1,4 +1,5 @@
 <Solution>
+  <Project Path="bibiloteket.External.Services/bibiloteket.External.Services.csproj" Id="8ee21ce3-f6b9-4453-bced-445e77c40e2d" />
   <Project Path="biblioteket.ApiService/biblioteket.ApiService.csproj" />
   <Project Path="biblioteket.AppHost/biblioteket.AppHost.csproj" />
   <Project Path="biblioteket.ChromeImporter/biblioteket.ChromeImporter.csproj" />
