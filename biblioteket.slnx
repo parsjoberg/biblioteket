@@ -4,6 +4,7 @@
   <Project Path="biblioteket.AppHost/biblioteket.AppHost.csproj" />
   <Project Path="biblioteket.ChromeImporter/biblioteket.ChromeImporter.csproj" />
   <Project Path="biblioteket.Data/biblioteket.Data.csproj" Id="044f99cd-45f8-4ca6-90a5-d36358eabe80" />
+  <Project Path="biblioteket.External.Services.Test/biblioteket.External.Services.Test.csproj" Id="c1b9a472-6a1e-46c5-8475-5d3f12c57d1b" />
   <Project Path="biblioteket.ServiceDefaults/biblioteket.ServiceDefaults.csproj" />
   <Project Path="biblioteket.Services/biblioteket.Services.csproj" Id="851014ce-65d4-41bb-9411-b95538954cec" />
   <Project Path="biblioteket.Web/biblioteket.Web.csproj" />

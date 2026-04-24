@@ -1,4 +1,7 @@
 using Microsoft.Data.Sqlite;
+using System.Runtime.CompilerServices;
+
+[assembly: InternalsVisibleTo("biblioteket.External.Services.Test")]
 
 namespace biblioteket.ChromeImporter;
 
@@ -39,7 +42,7 @@ public class ChromeHistoryService
         }
     }
 
-    private static List<LegimusHistoriePost> SökLegimusUrls(string dbSökväg)
+    internal static List<LegimusHistoriePost> SökLegimusUrls(string dbSökväg)
     {
         var resultat = new List<LegimusHistoriePost>();
         var connectionString = $"Data Source={dbSökväg};Mode=ReadOnly;";
@@ -78,7 +81,7 @@ ORDER BY start_time DESC";
     }
 
     // Chrome lagrar tid som mikrosekunder sedan 1 januari 1601 UTC.
-    private static DateTime ChromeTidTillDateTime(long chromeTid)
+    internal static DateTime ChromeTidTillDateTime(long chromeTid)
     {
         var epok = new DateTime(1601, 1, 1, 0, 0, 0, DateTimeKind.Utc);
         return epok.AddMicroseconds(chromeTid).ToLocalTime();
